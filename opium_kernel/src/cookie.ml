@@ -29,6 +29,16 @@
    STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. *)
 
+
+ let rec list_find_map ~f = function
+  | [] -> None
+  | x :: l ->
+     begin match f x with
+       | Some _ as result -> result
+       | None -> list_find_map f l
+     end
+;;
+
 module Signer = struct
   type t =
     { secret : string
@@ -475,7 +485,7 @@ let cookie_of_header ?signed_with cookie_key (key, value) =
   | "Cookie" | "cookie" ->
     String.split_on_char ';' value
     |> List.map (Astring.String.cut ~sep:"=")
-    |> ListLabels.find_map ~f:(function
+    |> list_find_map ~f:(function
            | Some (k, value) when k = cookie_key ->
              let value =
                match signed_with with
