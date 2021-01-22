@@ -148,6 +148,8 @@ let to_handler app =
 
 let port port t = { t with port }
 let jobs jobs t = { t with jobs }
+let debug debug t = { t with debug }
+let verbose verbose t = { t with verbose }
 let backlog backlog t = { t with backlog = Some backlog }
 let host host t = { t with host }
 let cmd_name name t = { t with name }
