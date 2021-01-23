@@ -102,10 +102,12 @@ let system_cores =
     (* TODO: detect number of cores on Windows *)
     1
   | true ->
-    let ic = Unix.open_process_in "getconf _NPROCESSORS_ONLN" in
-    let cores = int_of_string (input_line ic) in
-    ignore (Unix.close_process_in ic);
-    cores
+    try
+      let ic = Unix.open_process_in "getconf _NPROCESSORS_ONLN" in
+      let cores = int_of_string (input_line ic) in
+      ignore (Unix.close_process_in ic);
+      cores
+    with End_of_file -> 1
 ;;
 
 let empty =
